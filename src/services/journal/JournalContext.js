@@ -20,6 +20,7 @@ export const JournalContextProvider = ({ children }) => {
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitLoading,setIsSubmitLoading] = useState(false);
   const [isError, setIsError] = useState(null);
   const [nutritionInfo, setNutritionInfo] = useState([]);
 
@@ -30,7 +31,6 @@ export const JournalContextProvider = ({ children }) => {
       db.transaction((txn) => {
         txn.executeSql(
           `SELECT 
-            nutrition.id,
             nutrition.jour,
             nutrition.fruits,
             nutrition.vegetables, 
@@ -42,8 +42,8 @@ export const JournalContextProvider = ({ children }) => {
             drink.name,
             drink.quantity
           FROM nutrition 
-            INNER JOIN drink on nutrition.id = drink.nutritionId  
-            INNER JOIN food on nutrition.id = food.nutritionId  
+            LEFT JOIN drink on nutrition.jour = drink.nutritionId  
+            LEFT JOIN food on nutrition.jour = food.nutritionId  
           WHERE nutrition.jour = ? ;
           `,
           [queryDate],
@@ -61,7 +61,7 @@ export const JournalContextProvider = ({ children }) => {
       });
     };
     getNutritionInfo();
-  }, [chosenDate]);
+  }, [chosenDate, isSubmitLoading]);
 
   //sqlite create table
   const createTables = () => {
@@ -109,6 +109,69 @@ export const JournalContextProvider = ({ children }) => {
     });
   };
 
+  
+  /**
+   *  {"bowelMovement": 0, "drinksList": [{"drinkName": "Jus", "quantity": "0.9"}], "foodsList": [{"foodName": "riz sauté", "timesEaten": "2"}], "fruitsEaten": true, "healthReason": "Ventre", "isHealthy": false, "vegetablesEaten": true, "waterQuantity": "0.6"}
+   */
+  const insertData =  (data) => {
+    let queryDate = `${chosenDate.year}-${chosenDate.month}-${chosenDate.day}`;
+    data.drinksList.push({drinkName:"eau", quantity:data.waterQuantity})
+    setIsSubmitLoading(true);
+    db.transaction((txn) => {
+       // inserting into nutrition
+       txn.executeSql(
+          `INSERT INTO nutrition (jour, fruits, vegetables , bowelMovement, isHealthy, reason) VALUES (?,?,?,?,?,?)`,
+          [queryDate,data.fruitsEaten, data.vegetablesEaten, data.bowelMovement, data.isHealthy , data.healthReason ],
+          (sqlTxn, res) => {
+            console.log("insertion successful into nutrition");
+          },
+          (error) => {
+           setIsError("une erreur est surevenue lors de l'insertion dans la table nutrition", error.message);
+           setIsSubmitLoading(false);
+          }
+        );
+  
+         //inserting into drinks
+       if(data.drinksList.length > 0){
+         for(let drinkItem of data.drinksList){
+          txn.executeSql(
+            `INSERT INTO drink (name, quantity, nutritionId) VALUES(?,?,?)`,
+            [drinkItem.drinkName, drinkItem.quantity , queryDate],
+            (sqlTxn, res) => {
+              console.log( `drink inserted successfuly`);
+            },
+            (error) => {
+              console.log(
+                "Un erreur est survenue lors de l'insertion de la table drink" + error.message
+              );
+              setIsSubmitLoading(false);
+            }
+          );
+        }
+       }
+  
+        //inserting into food
+      if(data.foodsList.length > 0){
+        for(let foodItem of data.foodsList){
+          txn.executeSql(
+            `INSERT INTO food (name, timesEaten, nutritionId) VALUES(?,?,?)`,
+            [foodItem.foodName, foodItem.timesEaten , queryDate],
+            (sqlTxn, res) => {
+              console.log( `food inserted successfuly`);
+            },
+            (error) => {
+              console.log(
+                "une erreur survenue lors de l'insertion de la table food" + error.message
+              );
+               setIsSubmitLoading(false);
+                 }
+          );
+         }
+      }
+      setIsSubmitLoading(false);
+      });
+  }
+
   const handleDateChange = (dateInfo) => {
     console.log(dateInfo);
     setChosenDate({
@@ -129,10 +192,12 @@ export const JournalContextProvider = ({ children }) => {
         isLoading,
         isError,
         nutritionInfo,
+        isSubmitLoading,
         handleDateChange,
         showModal,
         hideModal,
         createTables,
+        insertData
       }}
     >
       {children}

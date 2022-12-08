@@ -4,7 +4,8 @@ export const colors = {
       secondary: "#5282BD",
       muted: "#C6DAF7",
       gray:"#E2E5DE",
-      white: "#ffffff"
+      white: "#ffffff",
+      error:"#FF0000"
     },
     ui: {
       primary: "#262626",

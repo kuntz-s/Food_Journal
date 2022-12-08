@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import { View, Text, ScrollView, ImageBackground } from "react-native";
+import { View, Text, ImageBackground } from "react-native";
 import styled from "styled-components";
 import { SafeArea } from "../../components/utility/SafeAreaComponent";
 import { JournalHeader } from "./components/JournalHeader";
@@ -7,14 +7,15 @@ import { DatesSlider } from "./components/DatesOfMonthSlider";
 import { DataDisplay } from "./components/DataDisplay";
 import { JournalContext } from "../../services/journal/JournalContext";
 
-export const JournalScreen = () => {
+export const JournalScreen = ({navigation}) => {
   const { isModalVisible, createTables } = useContext(JournalContext);
 
-  const DataWrapper = styled(ScrollView)`
+  const DataWrapper = styled(View)`
+  flex:1;
     background-color: ${(props) => props.theme.colors.brand.white};
     transform: translateY(-16px);
     border-radius: 20px;
-    padding-top: 20px;
+    padding: ${(props) => props.theme.space[3]};
   `;
 
   const Background = styled(ImageBackground).attrs({
@@ -65,7 +66,7 @@ export const JournalScreen = () => {
           <DatesSlider />
         </Background>
         <DataWrapper>
-          <DataDisplay />
+          <DataDisplay navigation ={navigation} />
         </DataWrapper>
       </SafeArea>
     );

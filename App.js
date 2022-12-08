@@ -11,7 +11,7 @@ import {
 } from "@expo-google-fonts/roboto";
 import { theme } from "./src/infrastructure/theme/index.js";
 import { JournalContextProvider } from "./src/services/journal/JournalContext.js";
-import { JournalScreen } from "./src/features/journal/JournalScreen.js";
+import { Navigation } from "./src/infrastructure/navigation/index.js";
 //import { View, Text } from "react-native";
 
 export default function App() {
@@ -26,15 +26,50 @@ export default function App() {
     <>
       <ThemeProvider theme={theme}>
         <JournalContextProvider>
-          <JournalScreen />
+          <Navigation />
         </JournalContextProvider>
       </ThemeProvider>
       <StatusBar style="auto" />
     </>
   );
-}
+} 
 
-/*import React, { useEffect, useState } from "react";
+/*
+const drinkData = [
+  {
+    name:"vin rouge", 
+    quantity: 0.62,
+  },
+  {
+    name:"jus", 
+    quantity: 0.52,
+  },
+  {
+    name:"bière", 
+    quantity: 0.63,
+  },
+  {
+    name:"vin blanc", 
+    quantity: 0.65,
+  },
+]
+
+const foodData = [
+  {
+    name:"okok sucré", 
+    quantity: 3,
+  },
+  {
+    name:"okok salé", 
+    quantity: 2,
+  },
+  {
+    name:"pain chocolat", 
+    quantity: 1,
+  }
+]
+
+import React, { useEffect, useState } from "react";
 import { View, Text, Alert } from "react-native";
 import {TextInput, Button} from "react-native-paper";
 import * as SQLite from "expo-sqlite";
@@ -127,46 +162,93 @@ export default function App() {
       );
 
      // inserting into nutrition
-      txn.executeSql(
+     txn.executeSql(
         `INSERT INTO nutrition (jour, fruits, vegetables , bowelMovement, isHealthy, reason) VALUES (?,?,?,?,?,?)`,
-        ["2022-11-24",true, false, 4, true , "aucune" ],
+        ["2022-11-20",true, false, 4, true , null ],
         (sqlTxn, res) => {
-          console.log( `nutrition inserted successfuly`);
+          console.log(res.rows);
         },
         (error) => {
           console.log(
-            "an error occured when inserting into the table" + error.message
+            "an error occured when inserting into the table nutrition" + error.message
           );
         }
       );
 
-      //inserting into drinks
-      txn.executeSql(
-        `INSERT INTO drink (name, quantity, nutritionId) VALUES(?,?,?)`,
-        ["bière", 0.85 , 1],
-        (sqlTxn, res) => {
-          console.log( `drink inserted successfuly`);
-          getDrinkList();
-        },
-        (error) => {
-          console.log(
-            "an error occured when inserting into the table" + error.message
+      inserting into drinks
+        for(let drinkItem of []){
+          txn.executeSql(
+            `INSERT INTO drink (name, quantity, nutritionId) VALUES(?,?,?)`,
+            [drinkItem.name, drinkItem.quantity , "2022-11-20"],
+            (sqlTxn, res) => {
+              console.log( `drink inserted successfuly`);
+            },
+            (error) => {
+              console.log(
+                "an error occured when inserting into the table drink" + error.message
+              );
+            }
           );
         }
-      );
 
       //inserting into food
+     for(let foodItem of foodData){
+      console.log(foodItem);
       txn.executeSql(
         `INSERT INTO food (name, timesEaten, nutritionId) VALUES(?,?,?)`,
-        ["couscous légumes", 1 , 1],
+        [foodItem.name, foodItem.quantity , "2022-11-20"],
         (sqlTxn, res) => {
           console.log( `food inserted successfuly`);
-          getFoodList();
         },
         (error) => {
           console.log(
-            "an error occured when inserting into the table" + error.message
+            "an error occured when inserting into the table food" + error.message
           );
+             }
+      );
+     }
+
+          //deleting tables
+      txn.executeSql(
+        `DROP table drink`,
+        [],
+        (sqlTxn, res) => {
+          console.log( `nutrition table deleted successfuly`);
+        },
+        (error) => {
+          console.log(
+            "an error occured when deleeting the table" + error.message
+          );
+        }
+      );
+    });
+  }
+
+  const selectInfo =() => {
+    db.transaction((txn) => {
+      txn.executeSql(
+        `SELECT 
+          nutrition.jour,
+          nutrition.fruits,
+          nutrition.vegetables, 
+          nutrition.bowelMovement,
+          nutrition.isHealthy,
+          nutrition.reason,
+          food.name as foodName,
+          food.timesEaten,
+          drink.name,
+          drink.quantity
+        FROM nutrition 
+          LEFT JOIN drink on nutrition.jour = drink.nutritionId  
+          LEFT JOIN food on nutrition.jour = food.nutritionId  
+        WHERE nutrition.jour = ? ;
+        `,
+        ["2022-11-20"],
+        (sqlTxn, res) => {
+          console.log(res.rows);
+        },
+        (error) => {
+         console.log("error ", error)
         }
       );
     });
@@ -175,7 +257,7 @@ export default function App() {
   const getCategories = () => {
     db.transaction((txn) => {
       txn.executeSql(
-        `SELECT * FROM nutrition ORDER BY id DESC`,
+        `SELECT * FROM nutrition ORDER BY jour DESC`,
         [],
         (sqlTxn, res) => {
           console.log( `nutrition retrieved successfuly`);
@@ -184,7 +266,7 @@ export default function App() {
             let result = [];
             for( let i = 0 ; i < len ; i++){
               let item = res.rows.item(i);
-              result.push({id: item.id, jour:item.jour ,fruits: item.fruits, vegetables : item.vegetables, bowel:item.bowelMovement, healthy: item.isHealthy, reason:item.reason});
+              result.push({jour:item.jour ,fruits: item.fruits, vegetables : item.vegetables, bowel:item.bowelMovement, healthy: item.isHealthy, reason:item.reason});
 
             }
             console.log(result);
@@ -237,7 +319,7 @@ export default function App() {
             let result = [];
             for( let i = 0 ; i < len ; i++){
               let item = res.rows.item(i);
-              result.push({id: item.id, name:item.name, timesEaten: item.timesEaten, nutritionId: item.nutritionId});
+              result.push({ name:item.name, timesEaten: item.timesEaten, nutritionId: item.nutritionId});
 
             }
             console.log(result);
@@ -265,7 +347,7 @@ export default function App() {
           <Button 
           icon="lock-open-outline"
           mode="contained"
-          onPress={handleCategories}>
+          onPress={selectInfo}>
             Ajout
           </Button>
           
