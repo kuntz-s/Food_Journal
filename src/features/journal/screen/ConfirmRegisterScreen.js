@@ -54,7 +54,7 @@ export const ConfirmRegisterScreen = ({ navigation }) => {
               bg={colors.brand.primary}
               mode="contained"
               onPress={() => {
-                navigation.navigate("Journal");
+                navigation.navigate("JournalScreen");
               }}
             >
               Continuer

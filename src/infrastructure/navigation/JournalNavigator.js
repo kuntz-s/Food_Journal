@@ -33,7 +33,7 @@ export const JournalNavigator = () => {
           headerShown: false,
           ...TransitionPresets.ModalPresentationIOS,
         }}
-        name="Journal"
+        name="JournalScreen"
         component={JournalScreen}
       />
       <JournalStack.Screen
