@@ -13,9 +13,9 @@ export const JournalScreen = ({navigation}) => {
   const DataWrapper = styled(View)`
   flex:1;
     background-color: ${(props) => props.theme.colors.brand.white};
-    transform: translateY(-16px);
     border-radius: 20px;
-    padding: ${(props) => props.theme.space[3]};
+    padding-horizontal: ${(props) => props.theme.space[3]};
+    padding-bottom: ${(props) => props.theme.space[3]};
   `;
 
   const Background = styled(ImageBackground).attrs({
@@ -64,7 +64,10 @@ export const JournalScreen = ({navigation}) => {
           <AccountCover /> 
           <JournalHeader />
           <DatesSlider />
+        <View style={{height:15, width:"100%", backgroundColor:"white", position:"absolute", bottom:0, borderTopLeftRadius:25, borderTopRightRadius:25}}/>
+
         </Background>
+
         <DataWrapper>
           <DataDisplay navigation ={navigation} />
         </DataWrapper>

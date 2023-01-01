@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { View } from "react-native";
 import {  ActivityIndicator } from "react-native-paper";
 import { JournalContext } from "../../../services/journal/JournalContext";
 import { colors } from "../../../infrastructure/theme/colors";
@@ -16,7 +17,7 @@ import { Wrapper,CalendarIcon, DayInfoWrapper,DayInfo,NutritionInfoWrapper, NotF
 
 const NotFoundComponent = ({ navigation, chosenDate }) => {
   return (
-    <NotFoundWrapper>
+    <NotFoundWrapper showsVerticalScrollIndicator={false}>
       <DayInfoWrapper>
         <Spacer position="right" size="medium">
           <CalendarIcon name="calendar" />
@@ -50,7 +51,7 @@ export const DataDisplay = ({ navigation }) => {
       );
     } else {
       return (
-        <NotFoundComponent navigation={navigation} chosenDate={chosenDate} />
+          <NotFoundComponent navigation={navigation} chosenDate={chosenDate} />
       );
     }
   } else {

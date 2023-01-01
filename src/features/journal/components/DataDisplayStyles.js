@@ -4,7 +4,6 @@ import { View, Text, ScrollView, Image } from "react-native";
 import { Button } from "react-native-paper";
 import { colors } from "../../../infrastructure/theme/colors";
 
-
 export const Wrapper = styled(ScrollView)`
   flex: 1;
 `;
@@ -32,14 +31,17 @@ export const NutritionInfoWrapper = styled(View)`
   padding: ${(props) => props.theme.space[3]};
 `;
 
-export const NotFoundWrapper = styled(View)`
-  flex: 1;
-  align-items: center;
-`;
+export const NotFoundWrapper = styled(ScrollView).attrs({
+  contentContainerStyle: {
+    alignItems: "center",
+  },
+})`
+flex: 1;
+`;;
 
 export const NotFoundImage = styled(Image)`
-  height: 300px;
-  width: 300px;
+  height: 270px;
+  width: 270px;
   border-radius: 80px;
   resize-mode: contain;
 `;
@@ -48,7 +50,7 @@ export const NotFoundText = styled(Text)`
   transform: translateY(-30px);
   font-weight: bold;
   font-size: ${(props) => props.theme.fontSizes.title};
-  color:#00563F
+  color: #00563f;
 `;
 
 export const NotFoundButton = styled(Button).attrs({
@@ -56,7 +58,7 @@ export const NotFoundButton = styled(Button).attrs({
   color: colors.brand.primary,
 })`
   border-radius: 30px;
-  padding:${props => props.theme.space[1]};
+  padding: ${(props) => props.theme.space[1]};
 `;
 
 export const LoadingWrapper = styled(View)`

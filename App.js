@@ -11,6 +11,7 @@ import {
 } from "@expo-google-fonts/roboto";
 import { theme } from "./src/infrastructure/theme/index.js";
 import { JournalContextProvider } from "./src/services/journal/JournalContext.js";
+import { DashboardContextProvider } from "./src/services/dashboard/DashboardContext.js";
 import { Navigation } from "./src/infrastructure/navigation/index.js";
 //import { View, Text } from "react-native";
 
@@ -26,13 +27,15 @@ export default function App() {
     <>
       <ThemeProvider theme={theme}>
         <JournalContextProvider>
-          <Navigation />
+          <DashboardContextProvider>
+            <Navigation />
+          </DashboardContextProvider>
         </JournalContextProvider>
       </ThemeProvider>
       <StatusBar style="auto" />
     </>
   );
-} 
+}
 
 /*
 const drinkData = [

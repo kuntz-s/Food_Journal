@@ -5,6 +5,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { JournalNavigator } from "./JournalNavigator";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { colors } from "../theme/colors";
+import { DashboardScreen } from "../../features/dashboard/DashboardScreen";
 
 export const Navigation = () => {
   const TAB_ICON = {
@@ -40,14 +41,6 @@ export const Navigation = () => {
 
   const Tab = createBottomTabNavigator();
 
-  const DashboardNavigator = () => {
-    return (
-      <View>
-        <Text>stephane</Text>
-      </View>
-    );
-  };
-
   const GraphNavigator = () => {
     return (
       <View>
@@ -80,7 +73,7 @@ export const Navigation = () => {
         />
         <Tab.Screen
           name="Dashboard"
-          component={DashboardNavigator}
+          component={DashboardScreen}
           options={{ headerShown: false }}
         />
          <Tab.Screen
