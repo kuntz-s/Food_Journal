@@ -14,6 +14,7 @@ export const DashboardContextProvider = ({ children }) => {
   const [foodsList , setFoodsList] = useState([]);
   const [drinksList , setDrinksList] = useState([]);
   const [daysNumber ,setDaysNumber] = useState(0);
+  const [increment ,setIncrement ] = useState(0);
   
 
 
@@ -39,6 +40,7 @@ export const DashboardContextProvider = ({ children }) => {
           [],
           (sqlTxn, res) => {
             const sortedData = sortDatabaseList(res.rows._array);
+            console.log("sorted data is", getFoodsCount(sortedData));
             setFoodsList(getFoodsCount(sortedData));
             setIsLoading(false);
             setIsError(null);
@@ -54,7 +56,7 @@ export const DashboardContextProvider = ({ children }) => {
           [],
           (sqlTxn, res) => {
             const sortedData = sortDatabaseList(res.rows._array);
-            setDrinksList(getDrinksCount(sortedData));
+            setDrinksList(getDrinksCount(sortedData)); 
           },
           (error) => {
             setIsError(error.message);
@@ -68,7 +70,9 @@ export const DashboardContextProvider = ({ children }) => {
       
     };
     getDatabaseInfo();
-  }, [ ]);
+  }, [increment ]);
+
+  const handleIncrement = () => {setIncrement((prev) => prev+1)}
 
   return (
     <DashboardContext.Provider 
@@ -77,7 +81,8 @@ export const DashboardContextProvider = ({ children }) => {
         isError,
         foodsList,
         drinksList,
-        daysNumber
+        daysNumber,
+        handleIncrement
       }}
     > 
       {children}

@@ -20,7 +20,9 @@ export const sortDatabaseList = (dataList) => {
 export const getFoodsCount = (newFoodsList) => {
   let result = [];
   let rand = Math.floor(Math.random() * 1300);
-  result = [...result, {...newFoodsList[0], color:colorsList[rand].hex, legendFontColor:"#7F7F7F", legendFontSize:15}];
+  if(newFoodsList.length > 0){
+    result = [...result, {...newFoodsList[0], color:colorsList[rand].hex, legendFontColor:"#7F7F7F", legendFontSize:15}];
+  }
   for (let i = 1; i < newFoodsList.length; i++) {
     if (
       newFoodsList[i].name.toUpperCase() ===
@@ -41,7 +43,9 @@ export const getFoodsCount = (newFoodsList) => {
 export const getDrinksCount = (newDrinksList ) => {
   let result = [];
   let rand = Math.floor(Math.random() * 1300);
-  result = [...result, {...newDrinksList[0], color:colorsList[rand].hex, legendFontColor:"#7F7F7F", legendFontSize:15}];
+  if(newDrinksList.length > 0){
+    result = [...result, {...newDrinksList[0], color:colorsList[rand].hex, legendFontColor:"#7F7F7F", legendFontSize:15}];
+  }
   for (let i = 1; i < newDrinksList.length; i++) {
     if (
       newDrinksList[i].name.toUpperCase() ===

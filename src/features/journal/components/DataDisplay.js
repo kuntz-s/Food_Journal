@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { View, TouchableOpacity, Alert } from "react-native";
 import { ActivityIndicator, Button } from "react-native-paper";
 import { JournalContext } from "../../../services/journal/JournalContext";
+import { DashboardContext } from "../../../services/dashboard/DashboardContext";
 import { colors } from "../../../infrastructure/theme/colors";
 import { listeMois } from "../../../components/Constant";
 import { Spacer } from "../../../components/utility/SpacerComponent";
@@ -55,6 +56,7 @@ const NotFoundComponent = ({ navigation, chosenDate }) => {
 
 export const DataDisplay = ({ navigation }) => {
   const { isLoading, nutritionInfo, chosenDate , deleteData} = useContext(JournalContext);
+  const {handleIncrement} = useContext(DashboardContext);
   if (nutritionInfo.length === 0) {
     if (isLoading) {
       return (
@@ -94,7 +96,7 @@ export const DataDisplay = ({ navigation }) => {
               text: "Annuler",
               style: "cancel",
             },
-            { text: "Oui", onPress: () => deleteData() },
+            { text: "Oui", onPress: () =>{ deleteData();handleIncrement()} },
           ]
         );
 

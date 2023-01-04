@@ -76,11 +76,6 @@ export const Navigation = () => {
           component={DashboardScreen}
           options={{ headerShown: false }}
         />
-         <Tab.Screen
-          name="Paramètres"
-          component={SettingsNavigator}
-          options={{ headerShown: false }}
-        />
        
       </Tab.Navigator>
     </NavigationContainer>
