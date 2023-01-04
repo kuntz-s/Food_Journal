@@ -40,23 +40,28 @@ export const FruitRegisterScreen = ({ navigation, route }) => {
 
   return (
     <SafeArea>
-      <GoBackButton
-        onPress={() => navigation.goBack()}
-        icon="arrow-left"
-        color="black"
-      >
-        Retour
-      </GoBackButton>
-      <GoNextButton
-        mode="contained"
-        onPress={() =>
-          navigation.navigate("VegetableRegister", { ...route.params, fruitsEaten })
-        }
-        color={colors.brand.primary}
-      >
-        Suivant
-      </GoNextButton>
-      <Wrapper>
+      <Wrapper showsVerticalScrollIndicator={false}>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <GoBackButton
+            onPress={() => navigation.goBack()}
+            icon="arrow-left"
+            color="black"
+          >
+            Retour
+          </GoBackButton>
+          <GoNextButton
+            mode="contained"
+            onPress={() =>
+              navigation.navigate("VegetableRegister", {
+                ...route.params,
+                fruitsEaten,
+              })
+            }
+            color={colors.brand.primary}
+          >
+            Suivant
+          </GoNextButton>
+        </View>
         <Spacer position="top" size="large">
           <AnimationWrapper>
             <LottieAnimation

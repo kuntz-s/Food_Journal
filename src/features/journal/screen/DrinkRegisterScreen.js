@@ -45,7 +45,7 @@ const TrashIcon = styled(Icon).attrs({
 `;
 
 export const DrinkRegisterScreen = ({ navigation, route }) => {
-    const {foodsList, waterQuantity} = route.params;
+  const { foodsList, waterQuantity } = route.params;
   const [visible, setVisible] = useState(false);
   const [drinksList, setDrinksList] = useState([]);
   const showModal = () => setVisible(true);
@@ -72,31 +72,38 @@ export const DrinkRegisterScreen = ({ navigation, route }) => {
   };
 
   const handleDelete = (drinkName) => {
-    let newdrinksList = drinksList.filter((drink) => drink.drinkName !== drinkName);
+    let newdrinksList = drinksList.filter(
+      (drink) => drink.drinkName !== drinkName
+    );
     setDrinksList(newdrinksList);
   };
 
   return (
     <SafeArea>
-      <GoBackButton
-        onPress={() => navigation.goBack()}
-        icon="arrow-left"
-        color="black"
-      >
-        Retour
-      </GoBackButton>
-      {drinksList.length > 0 && (
-        <GoNextButton
-          mode="contained"
-          onPress={() =>
-            navigation.navigate("FruitRegister", { ...route.params, drinksList: drinksList })
-          }
-          color={colors.brand.primary}
+      <Wrapper showsVerticalScrollIndicator={false}>
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <GoBackButton
+          onPress={() => navigation.goBack()}
+          icon="arrow-left"
+          color="black"
         >
-          Suivant
-        </GoNextButton>
-      )}
-      <Wrapper>
+          Retour
+        </GoBackButton>
+        {drinksList.length > 0 && (
+          <GoNextButton
+            mode="contained"
+            onPress={() =>
+              navigation.navigate("FruitRegister", {
+                ...route.params,
+                drinksList: drinksList,
+              })
+            }
+            color={colors.brand.primary}
+          >
+            Suivant
+          </GoNextButton>
+        )}
+        </View>
         <Spacer position="top" size="large">
           <AnimationWrapper>
             <LottieAnimation
@@ -150,7 +157,10 @@ export const DrinkRegisterScreen = ({ navigation, route }) => {
                     bg={colors.brand.primary}
                     onPress={() => {
                       setDrinksList([]);
-                      navigation.navigate("FruitRegister", {...route.params, drinksList: [] });
+                      navigation.navigate("FruitRegister", {
+                        ...route.params,
+                        drinksList: [],
+                      });
                     }}
                   >
                     Je n'ai bu aucune boisson

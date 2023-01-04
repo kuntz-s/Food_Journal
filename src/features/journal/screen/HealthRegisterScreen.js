@@ -65,23 +65,25 @@ export const HealthRegisterScreen = ({ navigation, route }) => {
 
   return (
     <SafeArea>
-      <GoBackButton
-        onPress={() => navigation.goBack()}
-        icon="arrow-left"
-        color="black"
-      >
-        Retour
-      </GoBackButton>
-      {(isHealthy || (!isHealthy && healthReason)) && (
-        <GoNextButton
-          mode="contained"
-          onPress={() => handleNavigation(navigation)}
-          color={colors.brand.primary}
-        >
-          Suivant
-        </GoNextButton>
-      )}
-      <Wrapper>
+      <Wrapper showsVerticalScrollIndicator={false}>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <GoBackButton
+            onPress={() => navigation.goBack()}
+            icon="arrow-left"
+            color="black"
+          >
+            Retour
+          </GoBackButton>
+          {(isHealthy || (!isHealthy && healthReason)) && (
+            <GoNextButton
+              mode="contained"
+              onPress={() => handleNavigation(navigation)}
+              color={colors.brand.primary}
+            >
+              Suivant
+            </GoNextButton>
+          )}
+        </View>
         <Spacer position="top" size="large">
           <AnimationWrapper>
             <LottieAnimation

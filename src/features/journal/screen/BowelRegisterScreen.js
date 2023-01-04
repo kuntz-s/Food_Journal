@@ -37,23 +37,25 @@ export const BowelRegisterScreen = ({ navigation, route }) => {
 
   return (
     <SafeArea>
-      <GoBackButton
-        onPress={() => navigation.goBack()}
-        icon="arrow-left"
-        color="black"
-      >
-        Retour
-      </GoBackButton>
-      {bowelMovement && (
-        <GoNextButton
-          mode="contained"
-          onPress={() => handleNavigation(navigation)}
-          color={colors.brand.primary}
+      <Wrapper showsVerticalScrollIndicator={false}>
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <GoBackButton
+          onPress={() => navigation.goBack()}
+          icon="arrow-left"
+          color="black"
         >
-          Suivant
-        </GoNextButton>
-      )}
-      <Wrapper>
+          Retour
+        </GoBackButton>
+        {bowelMovement && (
+          <GoNextButton
+            mode="contained"
+            onPress={() => handleNavigation(navigation)}
+            color={colors.brand.primary}
+          >
+            Suivant
+          </GoNextButton>
+        )}
+        </View>
         <Spacer position="top" size="large">
           <AnimationWrapper>
             <LottieAnimation

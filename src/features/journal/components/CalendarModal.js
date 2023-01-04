@@ -1,8 +1,9 @@
-import React, { useState, useContext } from "react";
+import React, { useState,useEffect, useContext } from "react";
 import { Modal, Text } from "react-native-paper";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import styled from "styled-components";
 import { JournalContext } from "../../../services/journal/JournalContext";
+import { getDatesList } from "./Constants";
 import { colors } from "../../../infrastructure/theme/colors";
 
 LocaleConfig.locales["fr"] = {
@@ -59,7 +60,15 @@ const ModalWrapper = styled(Modal).attrs({
 })``;
 
 export const CalendarModal = ({ visible, hideModal }) => {
-  const { chosenDate, handleDateChange } = useContext(JournalContext);
+  const { chosenDate, handleDateChange,dataList } = useContext(JournalContext);
+  const [datesMarked, setDatesMarked] = useState({});
+
+
+  useEffect(() => {
+    if(dataList.length > 0){
+      setDatesMarked(getDatesList(dataList));
+    }
+  },[dataList])
 
   const handleDayPress = (dateInfo) => {
     console.log(dateInfo), handleDateChange(dateInfo);
@@ -75,6 +84,7 @@ export const CalendarModal = ({ visible, hideModal }) => {
           todayTextColor: colors.brand.primary,
           todayButtonFontWeight: "900",
         }}
+        markedDates={datesMarked}
         //date minimal
         minDate="2022-01-01"
         onDayPress={(e) => {

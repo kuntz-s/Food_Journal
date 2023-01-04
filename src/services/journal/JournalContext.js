@@ -22,6 +22,7 @@ export const JournalContextProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitLoading,setIsSubmitLoading] = useState(false);
   const [isError, setIsError] = useState(null);
+  const [dataList , setDataList] = useState([]);
   const [nutritionInfo, setNutritionInfo] = useState([]);
 
   useEffect(() => {
@@ -58,6 +59,21 @@ export const JournalContextProvider = ({ children }) => {
             setIsLoading(false);
           }
         );
+
+        txn.executeSql(
+          `SELECT * FROM nutrition  ;
+          `,
+          [],
+          (sqlTxn, res) => {
+            setDataList(res.rows._array);
+          },
+          (error) => {
+            setIsError(error.message);
+            setIsLoading(false);
+          }
+        );
+
+        
       });
     };
     getNutritionInfo();
@@ -114,7 +130,7 @@ export const JournalContextProvider = ({ children }) => {
    *  {"bowelMovement": 0, "drinksList": [{"drinkName": "Jus", "quantity": "0.9"}], "foodsList": [{"foodName": "riz sauté", "timesEaten": "2"}], "fruitsEaten": true, "healthReason": "Ventre", "isHealthy": false, "vegetablesEaten": true, "waterQuantity": "0.6"}
    */
   const insertData =  (data) => {
-    let queryDate = `${chosenDate.year}-${chosenDate.month}-${chosenDate.day}`;
+    let queryDate = `${chosenDate.year}-${chosenDate.month }-${chosenDate.day}`;
     data.drinksList.push({drinkName:"eau", quantity:data.waterQuantity})
     setIsSubmitLoading(true);
     db.transaction((txn) => {
@@ -172,6 +188,51 @@ export const JournalContextProvider = ({ children }) => {
       });
   }
 
+  const deleteData = () => {
+    let queryDate = `${chosenDate.year}-${chosenDate.month }-${chosenDate.day}`;
+    setIsSubmitLoading(true);
+    db.transaction((txn) => {
+       // inserting into nutrition
+       txn.executeSql(
+          `DELETE FROM drink WHERE nutritionId = ?`,
+          [queryDate],
+          (sqlTxn, res) => {
+            console.log("deletion successful into drink");
+          },
+          (error) => {
+           setIsError("une erreur est surevenue lors de la suppression dans la table drink", error.message);
+           setIsSubmitLoading(false);
+          }
+        );
+
+        txn.executeSql(
+          `DELETE FROM food WHERE nutritionId = ?`,
+          [queryDate],
+          (sqlTxn, res) => {
+            console.log("deletion successful into food");
+          },
+          (error) => {
+           setIsError("une erreur est surevenue lors de la suppression dans la table food", error.message);
+           setIsSubmitLoading(false);
+          }
+        );
+
+        txn.executeSql(
+          `DELETE FROM nutrition WHERE jour = ?`,
+          [queryDate],
+          (sqlTxn, res) => {
+            console.log("deletion successful into nutrition");
+          },
+          (error) => {
+           setIsError("une erreur est surevenue lors de la suppression dans la table nutrition", error.message);
+           setIsSubmitLoading(false);
+          }
+        );
+        setIsSubmitLoading(false);
+      
+    })
+  }
+
   const handleDateChange = (dateInfo) => {
     console.log(dateInfo);
     setChosenDate({
@@ -193,11 +254,13 @@ export const JournalContextProvider = ({ children }) => {
         isError,
         nutritionInfo,
         isSubmitLoading,
+        dataList,
         handleDateChange,
         showModal,
         hideModal,
         createTables,
-        insertData
+        insertData,
+        deleteData
       }}
     >
       {children}

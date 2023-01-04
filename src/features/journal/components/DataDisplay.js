@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
-import { View } from "react-native";
-import {  ActivityIndicator } from "react-native-paper";
+import { View, TouchableOpacity, Alert } from "react-native";
+import { ActivityIndicator, Button } from "react-native-paper";
 import { JournalContext } from "../../../services/journal/JournalContext";
 import { colors } from "../../../infrastructure/theme/colors";
 import { listeMois } from "../../../components/Constant";
@@ -12,8 +12,19 @@ import {
   getUniqueDrinks,
   getUniqueFoods,
 } from "./Constants";
-import { Wrapper,CalendarIcon, DayInfoWrapper,DayInfo,NutritionInfoWrapper, NotFoundWrapper, NotFoundImage, NotFoundText, NotFoundButton, LoadingWrapper } from "./DataDisplayStyles";
-
+import { GoNextButton } from "./RegisteringStyles";
+import {
+  Wrapper,
+  CalendarIcon,
+  DayInfoWrapper,
+  DayInfo,
+  NutritionInfoWrapper,
+  NotFoundWrapper,
+  NotFoundImage,
+  NotFoundText,
+  NotFoundButton,
+  LoadingWrapper,
+} from "./DataDisplayStyles";
 
 const NotFoundComponent = ({ navigation, chosenDate }) => {
   return (
@@ -29,7 +40,13 @@ const NotFoundComponent = ({ navigation, chosenDate }) => {
       </DayInfoWrapper>
       <NotFoundImage source={require("../../../image/notFound.png")} />
       <NotFoundText>Aucune donnée trouvée pour cette date</NotFoundText>
-      <NotFoundButton icon="plus" mode="contained" onPress={() => {navigation.navigate("FoodRegister")}}>
+      <NotFoundButton
+        icon="plus"
+        mode="contained"
+        onPress={() => {
+          navigation.navigate("FoodRegister");
+        }}
+      >
         Ajouter{" "}
       </NotFoundButton>
     </NotFoundWrapper>
@@ -37,7 +54,7 @@ const NotFoundComponent = ({ navigation, chosenDate }) => {
 };
 
 export const DataDisplay = ({ navigation }) => {
-  const { isLoading, nutritionInfo, chosenDate } = useContext(JournalContext);
+  const { isLoading, nutritionInfo, chosenDate , deleteData} = useContext(JournalContext);
   if (nutritionInfo.length === 0) {
     if (isLoading) {
       return (
@@ -51,7 +68,7 @@ export const DataDisplay = ({ navigation }) => {
       );
     } else {
       return (
-          <NotFoundComponent navigation={navigation} chosenDate={chosenDate} />
+        <NotFoundComponent navigation={navigation} chosenDate={chosenDate} />
       );
     }
   } else {
@@ -66,6 +83,21 @@ export const DataDisplay = ({ navigation }) => {
         </LoadingWrapper>
       );
     } else {
+      const createTwoButtonAlert = () =>
+        Alert.alert(
+          "SUPPRESSION",
+          `Voulez vous vraiment supprimer vous les données du ${chosenDate.day} ${
+            listeMois[chosenDate.month - 1].nom
+          } ${chosenDate.year}`,
+          [
+            {
+              text: "Annuler",
+              style: "cancel",
+            },
+            { text: "Oui", onPress: () => deleteData() },
+          ]
+        );
+
       return (
         <Wrapper showsVerticalScrollIndicator={false}>
           <DayInfoWrapper>
@@ -152,7 +184,7 @@ export const DataDisplay = ({ navigation }) => {
                 imgUrl={require(`../../../image/Health.png`)}
                 titleName="SANTE"
                 subTitleName={
-                  nutritionInfo[0].reason 
+                  nutritionInfo[0].reason
                     ? "Problème de santé signalé"
                     : "Aucun problème signalé"
                 }
@@ -173,6 +205,22 @@ export const DataDisplay = ({ navigation }) => {
                 data={nutritionInfo[0]}
               />
             </Spacer>
+            <View style={{ paddingVertical: 18 }}>
+              <TouchableOpacity
+                style={{ backgroundColor: "red", borderRadius: 10 }}
+              >
+                <GoNextButton
+                  icon="delete-outline"
+                  color="white"
+                  labelStyle={{ fontSize: 18 }}
+                  contentStyle={{ fontSize: 18 }}
+                  onPress={createTwoButtonAlert}
+                  mode="text"
+                >
+                  Supprimer
+                </GoNextButton>
+              </TouchableOpacity>
+            </View>
           </NutritionInfoWrapper>
         </Wrapper>
       );

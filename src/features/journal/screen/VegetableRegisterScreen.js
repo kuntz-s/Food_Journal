@@ -36,29 +36,34 @@ const BooleanTextInfo = styled(Text)`
 `;
 
 export const VegetableRegisterScreen = ({ navigation, route }) => {
-  const {foodsList, drinksList, waterQuantity, fruitsEaten} = route.params;
+  const { foodsList, drinksList, waterQuantity, fruitsEaten } = route.params;
   console.log(route.params);
   const [vegetablesEaten, setVegetablesEaten] = useState(false);
 
   return (
     <SafeArea>
-      <GoBackButton
-        onPress={() => navigation.goBack()}
-        icon="arrow-left"
-        color="black"
-      >
-        Retour
-      </GoBackButton>
-      <GoNextButton
-        mode="contained"
-        onPress={() =>
-          navigation.navigate("BowelRegister", { ...route.params, vegetablesEaten })
-        }
-        color={colors.brand.primary}
-      >
-        Suivant
-      </GoNextButton>
-      <Wrapper>
+      <Wrapper showsVerticalScrollIndicator={false}>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <GoBackButton
+            onPress={() => navigation.goBack()}
+            icon="arrow-left"
+            color="black"
+          >
+            Retour
+          </GoBackButton>
+          <GoNextButton
+            mode="contained"
+            onPress={() =>
+              navigation.navigate("BowelRegister", {
+                ...route.params,
+                vegetablesEaten,
+              })
+            }
+            color={colors.brand.primary}
+          >
+            Suivant
+          </GoNextButton>
+        </View>
         <Spacer position="top" size="large">
           <AnimationWrapper>
             <LottieAnimation

@@ -77,25 +77,30 @@ export const FoodRegisterScreen = ({ navigation, route }) => {
 
   return (
     <SafeArea>
-      <GoBackButton
-        onPress={() => navigation.goBack()}
-        icon="arrow-left"
-        color="black"
-      >
-        Retour
-      </GoBackButton>
-      {foodsList.length > 0 && (
-        <GoNextButton
-          mode="contained"
-          onPress={() =>
-            navigation.navigate("WaterRegister", {...route.params, foodsList: foodsList })
-          }
-          color={colors.brand.primary}
+      <Wrapper showsVerticalScrollIndicator={false}>
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <GoBackButton
+          onPress={() => navigation.goBack()}
+          icon="arrow-left"
+          color="black"
         >
-          Suivant
-        </GoNextButton>
-      )}
-      <Wrapper>
+          Retour
+        </GoBackButton>
+        {foodsList.length > 0 && (
+          <GoNextButton
+            mode="contained"
+            onPress={() =>
+              navigation.navigate("WaterRegister", {
+                ...route.params,
+                foodsList: foodsList,
+              })
+            }
+            color={colors.brand.primary}
+          >
+            Suivant
+          </GoNextButton>
+        )}
+        </View>
         <Spacer position="top" size="large">
           <AnimationWrapper>
             <LottieAnimation
@@ -149,7 +154,10 @@ export const FoodRegisterScreen = ({ navigation, route }) => {
                     bg={colors.brand.primary}
                     onPress={() => {
                       setFoodsList([]);
-                      navigation.navigate("WaterRegister", { ...route.params,foodsList: [] });
+                      navigation.navigate("WaterRegister", {
+                        ...route.params,
+                        foodsList: [],
+                      });
                     }}
                   >
                     Je n'ai pas mangé aujourd'hui

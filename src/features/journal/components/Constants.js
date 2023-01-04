@@ -1,3 +1,4 @@
+
 export const textDisplay = (value) => {
   const returnValue = {
     fruits: [
@@ -148,3 +149,22 @@ export const getOtherDrinksQuantity = (nutritionData) => {
  */
 
 //{"drinksList": [], "foodsList": [{"foodName": "Pain", "timesEaten": "1"}, {"foodName": "Gateau", "timesEaten": "2"}], "fruitsEaten": true, "waterQuantity": "0.9"}
+
+const tranformJour = (jour) => {
+  let newJour = jour;
+  if (jour.slice(6, 7) === "-") {
+    newJour = `${jour.slice(0, 5)}0${jour.slice(5, 6)}${jour.slice(6)}`;
+  }
+  if(newJour.length === 9){
+    newJour = `${newJour.slice(0,8)}0${newJour.slice(8)}`;
+  }
+  return newJour;
+};
+
+export const getDatesList = (dataList) => {
+  let myObj = {};
+  for (let date of dataList) {
+    myObj[tranformJour(date.jour)] = { selected: true, marked: true, selectedColor: "blue" };
+  }
+  return myObj;
+};

@@ -1,10 +1,10 @@
-import { View, Text } from "react-native";
+import { View, Text,ScrollView } from "react-native";
 import LottieView from "lottie-react-native";
 import { Button , TextInput} from "react-native-paper";
 import styled from "styled-components";
 import { colors } from "../../../infrastructure/theme/colors";
 
-export const Wrapper = styled(View)`
+export const Wrapper = styled(ScrollView)`
   padding: ${(props) => props.theme.space[3]};
   flex: 1;  
 `;
@@ -20,7 +20,7 @@ export const ContentWrapper = styled(View)`
 
 export const LottieAnimation = styled(LottieView)`
   width: 300px;
-  height: 300px;
+  height: 250px;
 `;
 
 export const Title = styled(Text)`
@@ -43,14 +43,9 @@ export const ButtonInfo = styled(Button).attrs((props) => ({
 
 
 export const GoBackButton = styled(Button)`
-  position: absolute;
-  top: 10px;
 `;
 
 export const GoNextButton = styled(Button)`
-  position: absolute;
-  top: 12px;
-  right:15px;
   border-radius:20px;
 `;
 
