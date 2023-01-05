@@ -1,6 +1,8 @@
 import React, { createContext, useState, useEffect } from "react";
-import { sortDatabaseList, getFoodsCount, getDrinksCount } from "../../features/dashboard/components/Constants";
 import * as SQLite from "expo-sqlite";
+import { sortDatabaseList, getFoodsCount, getDrinksCount } from "../../features/dashboard/components/Constants";
+import { GenerateGraph } from "../Graph/GraphImplementation";
+
 
 const db = SQLite.openDatabase("db.db");
 
@@ -27,6 +29,7 @@ export const DashboardContextProvider = ({ children }) => {
           `SELECT * FROM nutrition; `,
           [],
           (sqlTxn, res) => {
+            setNutritionInfo(res.rows._array);
             setDaysNumber(res.rows.length);
           },
           (error) => {
@@ -40,7 +43,7 @@ export const DashboardContextProvider = ({ children }) => {
           [],
           (sqlTxn, res) => {
             const sortedData = sortDatabaseList(res.rows._array);
-            console.log("sorted data is", getFoodsCount(sortedData));
+            console.log(foodsList);
             setFoodsList(getFoodsCount(sortedData));
             setIsLoading(false);
             setIsError(null);
@@ -70,6 +73,7 @@ export const DashboardContextProvider = ({ children }) => {
       
     };
     getDatabaseInfo();
+    GenerateGraph(nutritionInfo, foodsList);
   }, [increment ]);
 
   const handleIncrement = () => {setIncrement((prev) => prev+1)}
@@ -82,6 +86,7 @@ export const DashboardContextProvider = ({ children }) => {
         foodsList,
         drinksList,
         daysNumber,
+        nutritionInfo,
         handleIncrement
       }}
     > 

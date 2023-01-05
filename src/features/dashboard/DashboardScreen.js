@@ -70,7 +70,6 @@ export const DashboardScreen = () => {
   const [drinksQuantity, setDrinksQuantity] = useState({ water: 0, drink: 0 });
 
   useEffect(() => {
-    console.log("foodslist are", foodsList)
     if (foodsList.length > 0) {
       setPieChartFoodData(foodsList);
     }

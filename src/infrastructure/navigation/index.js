@@ -40,14 +40,6 @@ export const Navigation = () => {
   };
 
   const Tab = createBottomTabNavigator();
-
-  const GraphNavigator = () => {
-    return (
-      <View>
-        <Text>stephane</Text>
-      </View>
-    );
-  };
   
   const SettingsNavigator = () => {
     return (
@@ -66,11 +58,11 @@ export const Navigation = () => {
           component={JournalNavigator}
           options={{ headerShown: false }}
         />
-         <Tab.Screen
+        {/*  <Tab.Screen
           name="Graph"
           component={GraphNavigator}
           options={{ headerShown: false }}
-        />
+        /> */}
         <Tab.Screen
           name="Dashboard"
           component={DashboardScreen}

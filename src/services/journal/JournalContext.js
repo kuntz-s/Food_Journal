@@ -49,10 +49,23 @@ export const JournalContextProvider = ({ children }) => {
           `,
           [queryDate],
           (sqlTxn, res) => {
-            console.log(res.rows);
+           // console.log(res.rows);
             setNutritionInfo(res.rows._array);
             setIsLoading(false);
             setIsError(null);
+          },
+          (error) => {
+            setIsError(error.message);
+            setIsLoading(false);
+          }
+        );
+
+        txn.executeSql(
+          `SELECT * FROM nutrition  ;
+          `,
+          [],
+          (sqlTxn, res) => {
+            setDataList(res.rows._array);
           },
           (error) => {
             setIsError(error.message);
