@@ -12,6 +12,9 @@ const ImageIllustration = styled(Image)`
 
 const CardInfo = styled(TouchableOpacity)`
   display: flex;
+  
+  flex-wrap:wrap;
+  justify-content:center;
   flex-direction: row;
   padding: ${(props) => props.theme.space[2]};
   border-radius: 13px;
@@ -25,10 +28,13 @@ const Title = styled(Text)`
   font-weight: bold;
   font-family: ${(props) => props.theme.fonts.heading};
   color: ${(props) => props.titleColor? props.titleColor: props.theme.colors.brand.primary};
+  text-align:center;
+
 `;
 
 const SubTitle = styled(Text)`
   font-size: ${(props) => props.theme.fontSizes.body};
+  text-align:center;
 `;
 
 export const DataCard = ({
@@ -46,7 +52,7 @@ export const DataCard = ({
     <CardInfo bgColor={bgColor} style={{  elevation: 3,
       shadowColor: 'black'}} activeOpacity={0.5} onPress = {() => navigation.navigate( "NutritionDetail",{bgColor, titleColor,imgUrl,name, data})}>
       <ImageIllustration source={imgUrl ? imgUrl : require(`../../../image/foodImage1.png`)} />
-      <Spacer position="left" size="large" />
+      <Spacer position="left" size="medium"  >
       <CardTextInfo>
         <Title titleColor={titleColor}>{!titleName? "non défini" :titleName}</Title>
         <Spacer position="top" size="medium" />
@@ -54,6 +60,7 @@ export const DataCard = ({
           {!subTitleName? "non défini" : subTitleName}  {subTitleValue && `: ${subTitleValue}` }
         </SubTitle>
       </CardTextInfo>
+      </Spacer>
     </CardInfo>
   );
 };

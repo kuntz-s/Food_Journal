@@ -15,6 +15,7 @@ export const JournalScreen = ({navigation}) => {
     background-color: ${(props) => props.theme.colors.brand.white};
     border-radius: 20px;
     padding-horizontal: ${(props) => props.theme.space[3]};
+    padding-bottom: ${(props) => props.theme.space[3]};
   `;
 
   const Background = styled(ImageBackground).attrs({

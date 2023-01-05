@@ -3,6 +3,7 @@ import { View, Text } from "react-native";
 import { Switch } from "react-native-paper";
 import styled from "styled-components";
 import { JournalContext } from "../../../services/journal/JournalContext";
+import { DashboardContext } from "../../../services/dashboard/DashboardContext";
 import { SafeArea } from "../../../components/utility/SafeAreaComponent";
 import { colors } from "../../../infrastructure/theme/colors";
 import { Spacer } from "../../../components/utility/SpacerComponent";
@@ -40,6 +41,7 @@ const BooleanTextInfo = styled(Text)`
 
 export const HealthRegisterScreen = ({ navigation, route }) => {
   const { insertData } = useContext(JournalContext);
+  const { handleIncrement } = useContext(DashboardContext);
   const [healthReason, setHealthReason] = useState(null);
   const [isHealthy, setIsHealthy] = useState(true);
   const [isError, setIsError] = useState({
@@ -60,6 +62,7 @@ export const HealthRegisterScreen = ({ navigation, route }) => {
       isHealthy,
       healthReason: isHealthy ? null : healthReason,
     });
+    handleIncrement();
     navigation.navigate("ConfirmRegister");
   };
 

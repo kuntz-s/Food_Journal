@@ -1,6 +1,8 @@
 import React, { createContext, useState, useEffect } from "react";
-import { sortDatabaseList, getFoodsCount, getDrinksCount } from "../../features/dashboard/components/Constants";
 import * as SQLite from "expo-sqlite";
+import { sortDatabaseList, getFoodsCount, getDrinksCount } from "../../features/dashboard/components/Constants";
+import { GenerateGraph } from "../Graph/GraphImplementation";
+
 
 const db = SQLite.openDatabase("db.db");
 
@@ -14,6 +16,7 @@ export const DashboardContextProvider = ({ children }) => {
   const [foodsList , setFoodsList] = useState([]);
   const [drinksList , setDrinksList] = useState([]);
   const [daysNumber ,setDaysNumber] = useState(0);
+  const [increment ,setIncrement ] = useState(0);
   
 
 
@@ -26,6 +29,7 @@ export const DashboardContextProvider = ({ children }) => {
           `SELECT * FROM nutrition; `,
           [],
           (sqlTxn, res) => {
+            setNutritionInfo(res.rows._array);
             setDaysNumber(res.rows.length);
           },
           (error) => {
@@ -39,6 +43,7 @@ export const DashboardContextProvider = ({ children }) => {
           [],
           (sqlTxn, res) => {
             const sortedData = sortDatabaseList(res.rows._array);
+            console.log(foodsList);
             setFoodsList(getFoodsCount(sortedData));
             setIsLoading(false);
             setIsError(null);
@@ -54,7 +59,7 @@ export const DashboardContextProvider = ({ children }) => {
           [],
           (sqlTxn, res) => {
             const sortedData = sortDatabaseList(res.rows._array);
-            setDrinksList(getDrinksCount(sortedData));
+            setDrinksList(getDrinksCount(sortedData)); 
           },
           (error) => {
             setIsError(error.message);
@@ -68,7 +73,10 @@ export const DashboardContextProvider = ({ children }) => {
       
     };
     getDatabaseInfo();
-  }, [ ]);
+    GenerateGraph(nutritionInfo, foodsList);
+  }, [increment ]);
+
+  const handleIncrement = () => {setIncrement((prev) => prev+1)}
 
   return (
     <DashboardContext.Provider 
@@ -77,7 +85,9 @@ export const DashboardContextProvider = ({ children }) => {
         isError,
         foodsList,
         drinksList,
-        daysNumber
+        daysNumber,
+        nutritionInfo,
+        handleIncrement
       }}
     > 
       {children}

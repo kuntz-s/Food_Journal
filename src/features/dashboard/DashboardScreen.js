@@ -143,7 +143,7 @@ export const DashboardScreen = () => {
               total={pieChartFoodData ? `${pieChartFoodData.length}` : `0`}
               average={
                 pieChartFoodData
-                  ? `${Math.floor(pieChartFoodData.length / daysNumber)} `
+                  ? `${Math.ceil(pieChartFoodData.length / daysNumber)} `
                   : `0 `
               }
             />
@@ -156,8 +156,9 @@ export const DashboardScreen = () => {
         </View>
         <View>
             <Text>Boisson la plus consommée : </Text>
-        </View>*/}
-
+        </View>
+        
+        */}
         <Spacer position="bottom" size="medium">
           {pieChartFoodData && <FoodPieChart foodsList={pieChartFoodData} />}
         </Spacer>
@@ -166,6 +167,8 @@ export const DashboardScreen = () => {
             <DrinksPieChart drinksList={pieChartDrinkData} />
           )}
         </Spacer>
+
+
       </Wrapper>
     </SafeArea>
   );
