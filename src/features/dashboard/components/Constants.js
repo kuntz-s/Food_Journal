@@ -44,7 +44,7 @@ export const getDrinksCount = (newDrinksList ) => {
   let result = [];
   let rand = Math.floor(Math.random() * 1300);
   if(newDrinksList.length > 0){
-    result = [...result, {...newDrinksList[0], color:colorsList[rand].hex, legendFontColor:"#7F7F7F", legendFontSize:15, quantity:1}];
+    result = [...result, {...newDrinksList[0], color:colorsList[rand].hex, legendFontColor:"#7F7F7F", legendFontSize:15}];
   }
   for (let i = 1; i < newDrinksList.length; i++) {
     if (
@@ -53,12 +53,14 @@ export const getDrinksCount = (newDrinksList ) => {
     ) {
         const ind = result.findIndex((elt) => elt.name.toUpperCase() === newDrinksList[i].name.toUpperCase());
        
-        result[ind] = {...result[ind], quantity: result[ind].quantity + 1};
+        result[ind] = {...result[ind], quantity: result[ind].quantity + newDrinksList[i].quantity};
     } else {
       rand = Math.floor(Math.random() * 1300);
-      result = [...result, {...newDrinksList[i], color:colorsList[rand].hex, legendFontColor:"#7F7F7F", legendFontSize:15, quantity:0}];
+      result = [...result, {...newDrinksList[i], color:colorsList[rand].hex, legendFontColor:"#7F7F7F", legendFontSize:15}];
     }
   }
+  console.log("data is", newDrinksList)
+  console.log("result is", result);
   return result;
 }
 /* 
@@ -87,6 +89,7 @@ export const getSicknessCount = (newHealthList) => {
 } */
 
 export const getDrinksQuantity = (data) => {
+  console.log("data is ",data);
   let filteredWaterData = data.filter((elt) => elt.name==="eau");
   let filteredDrinkData = data.filter((elt) => elt.name!=="eau");
   let waterResult=0;
